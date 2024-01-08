@@ -146,7 +146,7 @@ const GetDesign = () => {
                     headers: {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json',
-                        'token': 'a494e980c75364f27c8ae3f2c2d34f73'
+                        'token': 'a494e980c75364f21e2f74d3ed3c48a3'
                     },
                 },
             );
