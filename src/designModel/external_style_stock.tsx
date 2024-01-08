@@ -1,7 +1,6 @@
-import {useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import axios from "axios";
 import './design.css'
-import {EditOutlined, EllipsisOutlined, SettingOutlined} from '@ant-design/icons';
 import {Card, Image, Pagination, Modal, Button} from 'antd';
 
 const {Meta} = Card;
@@ -15,7 +14,6 @@ const MyCard = ({item, url, refId}) => {
             </p>
         )
     });
-    console.log(body)
     const showModal = () => {
         setIsModalOpen(true);
     };
@@ -30,10 +28,6 @@ const MyCard = ({item, url, refId}) => {
 
     return (
         <Card
-            onMouseEnter={() => {
-                refId.current = item.id
-            }
-            }
             style={{width: "300px", height: "345px"}}
             hoverable={true}
             bordered={true}
@@ -54,7 +48,7 @@ const MyCard = ({item, url, refId}) => {
             <Meta
                 title={
                     <>
-                        <div style={{height:"90px"}}>
+                        <div style={{height: "90px"}}>
                             <div>
                                 <p>{"款号：" + item['goodsCode']}</p>
                                 <p>{"款号后缀：" + item['goodsCodeSuffix']}</p>
@@ -102,21 +96,17 @@ const MyCard = ({item, url, refId}) => {
 }
 
 
-function MyTable({
-                     columnList, pageDisplay
-                 }) {
+function MyTable({columnList, pageDisplay}) {
     const refId = useRef(0)
     let cards = []
     const columnLists = columnList['data']['rows']
     columnLists.forEach((item) => {
-        const url = item['goodsPhoto'].length != 0 ? item['goodsPhoto'][0]['url'] : ''
+        const url = item['goodsPhoto'].length !== 0 ? item['goodsPhoto'][0]['url'] : ''
         cards.push(<MyCard key={item.id} item={item} url={url} refId={refId}></MyCard>)
     })
     return <>
         {pageDisplay}
-        {refId.current && <Modal title={refId.current}/>}
         <section className="myTable">
-            {/*{refId.current && <Modal title={refId.current}/>}*/}
             {cards}
         </section>
     </>
@@ -127,12 +117,18 @@ const GetDesign = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [err, setErr] = useState('');
     const [max, setMax] = useState(0)
-    let ref = useRef(1)
+    let refPage = useRef(1)
+    let refSpec = useRef(10)
 
     const setSetting = (data) => {
         setData(data);
         setMax(data['data']['total'])
     }
+
+    useEffect(() => {
+        getData()
+    }, [])
+
 
     const getData = async () => {
         setIsLoading(true);
@@ -140,8 +136,8 @@ const GetDesign = () => {
             const {data} = await axios.post(
                 'https://test.chuxianyun.com/api/oms/template/query/search',
                 {
-                    "currentPage": ref.current,
-                    "pageCapacity": 10,
+                    "currentPage": refPage.current,
+                    "pageCapacity": refSpec.current,
                     "businessType": 1,
                     "moduleType": 1,
                     "filter": {"isOpen": [0], "materialId": ["1", "2", "3", "6", "7"]}
@@ -150,7 +146,7 @@ const GetDesign = () => {
                     headers: {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json',
-                        'token': 'a494e980c75364f2aa2336fcddaf4097'
+                        'token': 'a494e980c75364f27c8ae3f2c2d34f73'
                     },
                 },
             );
@@ -162,23 +158,35 @@ const GetDesign = () => {
         }
     };
 
-    const onChange = (p) => {
-        ref.current = p
+    const onChange = (page, pageSize) => {
+        refPage.current = page
+        refSpec.current = pageSize
         getData()
     };
 
+    // const onShowSizeChange = () => {
+    //     console.log(current)
+    //     console.log(current)
+    //
+    //     refSpec.current = size
+    //     getData()
+    // }
     return <>
-        <button onClick={getData}>获取款型库图片</button>
         {isLoading && <h2>Loading...</h2>}
         {err && <h2>{err}</h2>}
         {data && (
             <MyTable columnList={data} pageDisplay={
                 <Pagination
-                    current={ref.current}
+                    current={refPage.current}
                     defaultCurrent={1}
+                    defaultPageSize={refSpec.current}
                     total={max}
                     showSizeChanger={true}
                     onChange={onChange}
+                    pageSizeOptions={[1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50]}
+                    showQuickJumper={true}
+                    // showTitle={true}
+                    // onShowSizeChange={onShowSizeChange}
 
                 />
             }/>
@@ -197,4 +205,3 @@ function Gallery() {
 }
 
 export default Gallery
-

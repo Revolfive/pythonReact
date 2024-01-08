@@ -112,24 +112,27 @@ const CxyLog = () => {
     };
 
     return (
-        <div className="chx-table">
-            <button onClick={handleClick}>新增</button>
-            <button onClick={handleClick}>删除</button>
-            <button onClick={handleClick}>复制</button>
-            <button onClick={handleClick}>清空</button>
-            <button onClick={handleClick}>暂存</button>
-            <button onClick={handleClick}>确认</button>
-            <button onClick={handleClick}>导入</button>
-            <button onClick={handleClick}>填充</button>
-            <button onClick={handleClick}>款式筛选</button>
+        <>
+            <h5>表单 示例</h5>
+            <div className="chx-table">
+                <button onClick={handleClick}>新增</button>
+                <button onClick={handleClick}>删除</button>
+                <button onClick={handleClick}>复制</button>
+                <button onClick={handleClick}>清空</button>
+                <button onClick={handleClick}>暂存</button>
+                <button onClick={handleClick}>确认</button>
+                <button onClick={handleClick}>导入</button>
+                <button onClick={handleClick}>填充</button>
+                <button onClick={handleClick}>款式筛选</button>
 
-            {/*{isLoading && <h2>Loading...</h2>}*/}
-            {err && <h2>{err}</h2>}
+                {/*{isLoading && <h2>Loading...</h2>}*/}
+                {err && <h2>{err}</h2>}
 
-            {data && (
-                <MyTable columnList={data}/>
-            )}
-        </div>
+                {data && (
+                    <MyTable columnList={data}/>
+                )}
+            </div>
+        </>
     );
 };
 export default CxyLog;
