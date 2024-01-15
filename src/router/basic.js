@@ -12,7 +12,7 @@ const Home = () => {
                 <Button className="e-button" type="primary">示例</Button>
             </Link>
             <Link to="/style">
-                <Button className="e-button" type="primary">款型库</Button>
+                <Button className="e-button" type="primary">款型库1</Button>
             </Link>
             <Link to="/table">
                 <Button className="e-button" type="primary">操作表</Button>
